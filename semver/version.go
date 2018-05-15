@@ -84,7 +84,7 @@ var vNR = `(0|[1-9][0-9]*)`
 var vPRPartsPattern = regexp.MustCompile(`\A` + vPRParts + `\z`)
 var vPartsPattern = regexp.MustCompile(`\A` + vParts + `\z`)
 
-var Max = &version{math.MaxInt64, math.MaxInt64, math.MaxInt64, nil, nil}
+var Max Version = &version{math.MaxInt64, math.MaxInt64, math.MaxInt64, nil, nil}
 var Min = &version{0, 0, 0, minPrereleases, nil}
 var Zero = &version{0, 0, 0, nil, nil}
 var VersionPattern = regexp.MustCompile(`\A` + vNR + `\.` + vNR + `\.` + vNR + vQualifier + `\z`)
@@ -110,6 +110,14 @@ func NewVersion3(major, minor, patch int, preRelease string, build string) (Vers
 		return nil, err
 	}
 	return &version{major, minor, patch, ps, bs}, nil
+}
+
+func MustParseVersion(str string) Version {
+	v, err := ParseVersion(str)
+	if err != nil {
+		panic(err)
+	}
+	return v
 }
 
 func ParseVersion(str string) (version Version, err error) {

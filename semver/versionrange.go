@@ -128,14 +128,14 @@ var highestLb = &gtRange{simpleRange{Max}}
 var lowestLb = &gtEqRange{simpleRange{Min}}
 var lowestUb = &ltRange{simpleRange{Min}}
 
-var MatchAll = &versionRange{`*`, []abstractRange{lowestLb}}
-var MatchNone = &versionRange{`<0.0.0`, []abstractRange{lowestUb}}
+var MatchAll VersionRange = &versionRange{`*`, []abstractRange{lowestLb}}
+var MatchNone VersionRange = &versionRange{`<0.0.0`, []abstractRange{lowestUb}}
 
-func ExactVersionRange(v Version) *versionRange {
+func ExactVersionRange(v Version) VersionRange {
 	return &versionRange{``, []abstractRange{&eqRange{simpleRange{v}}}}
 }
 
-func FromVersions(start Version, excludeStart bool, end Version, excludeEnd bool) *versionRange {
+func FromVersions(start Version, excludeStart bool, end Version, excludeEnd bool) VersionRange {
 	var as abstractRange
 	if excludeStart {
 		as = &gtRange{simpleRange{start}}
@@ -151,7 +151,15 @@ func FromVersions(start Version, excludeStart bool, end Version, excludeEnd bool
 	return newVersionRange(``, []abstractRange{as, ae})
 }
 
-func ParseVersionRange(vr string) (result *versionRange, err error) {
+func MustParseVersionRange(str string) VersionRange {
+	v, err := ParseVersionRange(str)
+	if err != nil {
+		panic(err)
+	}
+	return v
+}
+
+func ParseVersionRange(vr string) (result VersionRange, err error) {
 	if vr == `` {
 		return nil, nil
 	}
@@ -340,7 +348,7 @@ func (r *versionRange) ToString(bld io.Writer) {
 	}
 }
 
-func newVersionRange(vr string, ranges []abstractRange) *versionRange {
+func newVersionRange(vr string, ranges []abstractRange) VersionRange {
 	mergeHappened := true
 	for len(ranges) > 1 && mergeHappened {
 		mergeHappened = false

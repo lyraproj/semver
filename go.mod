@@ -1,1 +1,1 @@
-module github.com/puppetlabs/go-semver
+module github.com/lyraproj/semver

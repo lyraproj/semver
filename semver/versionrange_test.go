@@ -1,8 +1,9 @@
 package semver_test
 
 import (
-	"github.com/puppetlabs/go-semver/semver"
 	"fmt"
+
+	"github.com/lyraproj/semver/semver"
 )
 
 func ExampleParseVersionRange() {

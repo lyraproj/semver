@@ -2,7 +2,8 @@ package semver_test
 
 import (
 	"fmt"
-	"github.com/puppetlabs/go-semver/semver"
+
+	"github.com/lyraproj/semver/semver"
 )
 
 func ExampleParseVersion() {

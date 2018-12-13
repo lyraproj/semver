@@ -53,56 +53,55 @@ type VersionRange interface {
 }
 
 type abstractRange interface {
-		asLowerBound() abstractRange
-		asUpperBound() abstractRange
-		equals(or abstractRange) bool
-		includes(v Version) bool
-		isAbove(v Version) bool
-		isBelow(v Version) bool
-		isExcludeStart() bool
-		isExcludeEnd() bool
-		isLowerBound() bool
-		isUpperBound() bool
-		start() Version
-		end() Version
-		testPrerelease(v Version) bool
-		ToString(bld io.Writer)
-	}
+	asLowerBound() abstractRange
+	asUpperBound() abstractRange
+	equals(or abstractRange) bool
+	includes(v Version) bool
+	isAbove(v Version) bool
+	isBelow(v Version) bool
+	isExcludeStart() bool
+	isExcludeEnd() bool
+	isLowerBound() bool
+	isUpperBound() bool
+	start() Version
+	end() Version
+	testPrerelease(v Version) bool
+	ToString(bld io.Writer)
+}
 
 type simpleRange struct {
-		Version
-	}
+	Version
+}
 
 type startEndRange struct {
-		startCompare abstractRange
-		endCompare   abstractRange
-	}
+	startCompare abstractRange
+	endCompare   abstractRange
+}
 
 type eqRange struct {
-		simpleRange
-	}
+	simpleRange
+}
 
 type gtRange struct {
-		simpleRange
-	}
+	simpleRange
+}
 
 type gtEqRange struct {
-		simpleRange
-	}
+	simpleRange
+}
 
 type ltRange struct {
-		simpleRange
-	}
+	simpleRange
+}
 
 type ltEqRange struct {
-		simpleRange
-	}
+	simpleRange
+}
 
 type versionRange struct {
 	originalString string
 	ranges         []abstractRange
 }
-
 
 var nr = `0|[1-9][0-9]*`
 var xr = `(x|X|\*|` + nr + `)`
@@ -525,7 +524,7 @@ func createTildeRange(rxGroup []string, startInMatcher int) (abstractRange, erro
 	return allowPatchUpdates(rxGroup, startInMatcher, true)
 }
 
-func createCaretRange(rxGroup []string, startInMatcher int)  (abstractRange, error) {
+func createCaretRange(rxGroup []string, startInMatcher int) (abstractRange, error) {
 	major, ok, err := xDigit(rxGroup[startInMatcher])
 	if err != nil {
 		return nil, err
@@ -540,7 +539,7 @@ func createCaretRange(rxGroup []string, startInMatcher int)  (abstractRange, err
 	return allowMinorUpdates(rxGroup, major, startInMatcher)
 }
 
-func createXRange(rxGroup []string, startInMatcher int)  (abstractRange, error) {
+func createXRange(rxGroup []string, startInMatcher int) (abstractRange, error) {
 	return allowPatchUpdates(rxGroup, startInMatcher, false)
 }
 
@@ -883,7 +882,7 @@ func (r *simpleRange) end() Version {
 }
 
 func (r *simpleRange) testPrerelease(v Version) bool {
-	return !r.IsStable() && r.TripletEquals(v)
+	return r.Version == Min || !r.IsStable() && r.TripletEquals(v)
 }
 
 // Equals

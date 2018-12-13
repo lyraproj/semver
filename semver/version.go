@@ -70,7 +70,7 @@ type version struct {
 	build      []interface{}
 }
 
-var minPrereleases []interface{}
+var minPrereleases = []interface{}{}
 
 var vPRPart = `(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-]+[0-9A-Za-z-]*)`
 var vPRParts = vPRPart + `(?:\.` + vPRPart + `)*`
